@@ -24,10 +24,18 @@ const formatDate = (date) => {
  * @param {LoggingEvent} loggingEvent
  */
 const consoleAppender = (loggingEvent) => {
-  console.log(
+  const logData = [
     `[${loggingEvent.level.toUpperCase()}] ${formatDate(loggingEvent.date)} - `,
     ...loggingEvent.data
-  )
+  ]
+
+  let logFunction = console.log
+
+  if (typeof console[loggingEvent.level] === 'function') {
+    logFunction = console[loggingEvent.level]
+  }
+
+  logFunction(...logData)
 }
 
 /**
@@ -42,7 +50,7 @@ const loggerAppender = [consoleAppender]
  * @param {LoggingEvent} loggingEvent
  */
 const log = (loggingEvent) => {
-  if (LEVEL_MAP[loggingEvent.level] >= LEVEL_MAP[loggerLevel]) {
+  if (LEVEL_MAP[loggingEvent.level.toUpperCase()] >= LEVEL_MAP[loggerLevel]) {
     loggerAppender.forEach((appender) => appender(loggingEvent))
   }
 }
@@ -75,7 +83,7 @@ const logger = {}
 ;['debug', 'info', 'warn', 'error'].forEach((methodName) => {
   logger[methodName] = (...args) => {
     log({
-      level: methodName.toUpperCase(),
+      level: methodName,
       date: Date.now(),
       data: args
     })

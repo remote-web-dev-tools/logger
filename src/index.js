@@ -7,15 +7,20 @@ const LEVEL_MAP = {
   OFF: 10
 }
 
-/** @type{LoggerLevel} */
-let loggerLevel
+/**
+ *  Default all
+ *  @type{LoggerLevel}
+ */
+let loggerLevel = 'ALL'
 
 /**
  * Format date to HH:mm:ss
- * @param {Date} date
+ * @param {number} timestamp
  * @return string
  */
-const formatDate = (date) => {
+const formatDate = (timestamp) => {
+  const date = new Date(timestamp)
+
   return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
 }
 
@@ -66,8 +71,6 @@ const configure = (config) => {
 
   if (['ALL', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF'].includes(config.level)) {
     loggerLevel = config.level
-  } else {
-    loggerLevel = 'ALL'
   }
 
   if (Array.isArray(config.appender)) {

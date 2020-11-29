@@ -4,7 +4,7 @@ const LEVEL_MAP = {
   INFO: 2,
   WARN: 3,
   ERROR: 4,
-  OFF: 10,
+  OFF: 10
 }
 
 /** @type{LoggerLevel} */
@@ -15,7 +15,7 @@ let loggerLevel
  * @param {Date} date
  * @return string
  */
-function formatDate(date) {
+const formatDate = (date) => {
   return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
 }
 
@@ -42,7 +42,7 @@ const loggerAppender = [consoleAppender]
  * @param {LoggingEvent} loggingEvent
  */
 const log = (loggingEvent) => {
-  if (LEVEL_MAP[loggingEvent.level] > LEVEL_MAP[loggingEvent.level]) {
+  if (LEVEL_MAP[loggingEvent.level] >= LEVEL_MAP[loggerLevel]) {
     loggerAppender.forEach((appender) => appender(loggingEvent))
   }
 }
@@ -77,7 +77,7 @@ const logger = {}
     log({
       level: methodName.toUpperCase(),
       date: Date.now(),
-      data: args,
+      data: args
     })
   }
 })
@@ -90,12 +90,12 @@ const logger = {}
 const getLoggerConfiguration = () => {
   return {
     loggerLevel,
-    loggerAppender,
+    loggerAppender
   }
 }
 
 module.exports = {
   logger,
   configure,
-  getLoggerConfiguration,
+  getLoggerConfiguration
 }

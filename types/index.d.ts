@@ -8,8 +8,17 @@ export interface LoggingEvent {
 
 export type Appender = (loggingEvent: LoggingEvent) => void
 
+/**
+ * Logger config
+ */
 export interface LoggerConfig {
+  /**
+   * Global logger level, disable less the level log
+   */
   level?: LoggerLevel
+  /**
+   * Custom log appender
+   */
   appender?: Appender[]
 }
 

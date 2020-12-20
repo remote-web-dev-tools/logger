@@ -14,23 +14,12 @@ const LEVEL_MAP = {
 let loggerLevel = 'ALL'
 
 /**
- * Format date to HH:mm:ss
- * @param {number} timestamp
- * @return string
- */
-const formatDate = (timestamp) => {
-  const date = new Date(timestamp)
-
-  return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-}
-
-/**
  * Console.log Appender
  * @param {LoggingEvent} loggingEvent
  */
 const consoleAppender = (loggingEvent) => {
   const logData = [
-    `[${loggingEvent.level.toUpperCase()}] ${formatDate(loggingEvent.date)} - `,
+    `[${loggingEvent.level.toUpperCase()}] -`,
     ...loggingEvent.data
   ]
 
@@ -64,21 +53,32 @@ const log = (loggingEvent) => {
  * Configure logger
  * @param {LoggerConfig} config
  */
-const configure = (config) => {
-  if (!config) {
-    config = {}
-  }
+export const configure = (config = {}) => {
+  config = Object.assign({
+    appender: [],
+    level: 'ALL'
+  }, config)
 
   if (['ALL', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF'].includes(config.level)) {
     loggerLevel = config.level
+  } else {
+    throw new Error('Invalid logging level')
   }
 
-  if (Array.isArray(config.appender)) {
-    loggerAppender.push(...config.appender)
+  if (!Array.isArray(config.appender)) {
+    throw new Error('Invalid appender')
   }
+
+  config.appender.forEach((appender) => {
+    if (typeof appender !== 'function') {
+      throw new Error('Invalid appender')
+    } else {
+      loggerAppender.push(appender)
+    }
+  })
 }
 
-const logger = {}
+export const logger = {}
 
 /**
  * Define logger function
@@ -98,15 +98,9 @@ const logger = {}
  * @private
  * @returns {{loggerLevel: LoggerLevel, loggerAppender: Appender[]}}
  */
-const getLoggerConfiguration = () => {
+export const getLoggerConfiguration = () => {
   return {
     loggerLevel,
     loggerAppender
   }
-}
-
-module.exports = {
-  logger,
-  configure,
-  getLoggerConfiguration
 }

@@ -1,6 +1,8 @@
-# logger
+# @rwdt/logger
 
 [![Build Status](https://travis-ci.com/remote-web-dev-tools/logger.svg?branch=main)](https://travis-ci.com/remote-web-dev-tools/logger) [![Coverage Status](https://coveralls.io/repos/github/remote-web-dev-tools/logger/badge.svg?branch=main)](https://coveralls.io/github/remote-web-dev-tools/logger?branch=main)
+
+A simple javascript library for log.
 
 ## Install
 

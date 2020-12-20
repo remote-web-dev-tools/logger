@@ -12,10 +12,7 @@ const LEVEL_MAP = {
  * @param {LoggingEvent} loggingEvent
  */
 const consoleAppender = (loggingEvent) => {
-  const logData = [
-    `[${loggingEvent.level.toUpperCase()}] -`,
-    ...loggingEvent.data
-  ]
+  const logData = [`[${loggingEvent.level.toUpperCase()}] -`, ...loggingEvent.data]
 
   let logFunction = console.log
 
@@ -31,16 +28,19 @@ const consoleAppender = (loggingEvent) => {
  * @param {LoggerConfig} [config]
  * @constructor
  */
-export function Logger (config) {
+export function Logger(config) {
   this.appender = [consoleAppender]
   this.context = null
   this.loggerLevel = null
 
-  config = Object.assign({
-    appender: [],
-    level: 'ALL',
-    context: null
-  }, config)
+  config = Object.assign(
+    {
+      appender: [],
+      level: 'ALL',
+      context: null
+    },
+    config
+  )
 
   this.setLevel(config.level)
 
@@ -53,7 +53,7 @@ export function Logger (config) {
   this.setContext(config.context)
 }
 
-Logger.prototype.setLevel = function setLevel (level) {
+Logger.prototype.setLevel = function setLevel(level) {
   if (['ALL', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF'].includes(level)) {
     this.loggerLevel = level
   } else {
@@ -61,7 +61,7 @@ Logger.prototype.setLevel = function setLevel (level) {
   }
 }
 
-Logger.prototype.addAppender = function addAppender (appender) {
+Logger.prototype.addAppender = function addAppender(appender) {
   if (!Array.isArray(appender)) {
     appender = [appender]
   }
@@ -75,7 +75,7 @@ Logger.prototype.addAppender = function addAppender (appender) {
   })
 }
 
-Logger.prototype.setContext = function setContext (context = {}) {
+Logger.prototype.setContext = function setContext(context = {}) {
   this.context = context
 }
 
@@ -84,7 +84,7 @@ Logger.prototype.setContext = function setContext (context = {}) {
  * @private
  * @param {LoggingEvent} loggingEvent
  */
-Logger.prototype._log = function _log (loggingEvent) {
+Logger.prototype._log = function _log(loggingEvent) {
   if (LEVEL_MAP[loggingEvent.level.toUpperCase()] >= LEVEL_MAP[this.loggerLevel]) {
     this.appender.forEach((appender) => appender(loggingEvent))
   }

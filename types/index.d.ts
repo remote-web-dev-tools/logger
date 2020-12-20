@@ -46,11 +46,11 @@ export interface LoggerConfig {
   context?: any
 }
 
-export class Logger {
+declare class Logger {
   loggerLevel: LoggerLevel
   appender: Appender[]
 
-  constructor(config?: LoggerConfig);
+  constructor(config?: LoggerConfig)
 
   public debug(...args: any[]): void
 
@@ -60,9 +60,9 @@ export class Logger {
 
   public error(...args: any[]): void
 
-  public setLevel(level: LoggerLevel): void;
+  public setLevel(level: LoggerLevel): void
 
-  public setContext(context: any): void;
+  public setContext(context: any): void
 
-  public addAppender(appender: Appender | Appender[]): void;
+  public addAppender(appender: Appender | Appender[]): void
 }

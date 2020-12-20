@@ -7,7 +7,7 @@
   "types": "types/index.d.ts",
   "scripts": {
     "test": "jest --coverage && coveralls < coverage/lcov.info",
-    "lint": "eslint --color src",
+    "lint": "prettier -w src types test && eslint --color src",
     "build": "babel src -d lib",
     "changelog": "standard-changelog --first-release",
     "version": "npm run changelog && git add CHANGELOG.md",
@@ -37,5 +37,11 @@
     "prettier": "^2.2.1",
     "standard-changelog": "^2.0.27"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 120,
+    "semi": false,
+    "trailingComma": "none"
+  }
 }

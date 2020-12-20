@@ -3,9 +3,8 @@ import { Logger } from '../src'
 describe('logger', function () {
   /* mock console methods */
   beforeAll(() => {
-    ['info', 'warn', 'error', 'debug'].forEach((key) => {
-      console[key] = () => {
-      }
+    ;['info', 'warn', 'error', 'debug'].forEach((key) => {
+      console[key] = () => {}
     })
   })
 
@@ -20,13 +19,12 @@ describe('logger', function () {
       expect(logger.loggerLevel).toBe('ALL')
     })
 
-    it('Logger level should be in \'ALL\' | \'DEBUG\' | \'INFO\' | \'WARN\' | \'ERROR\' | \'OFF\'', function () {
+    it("Logger level should be in 'ALL' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'OFF'", function () {
       expect(() => new Logger({ level: 'other' })).toThrow('Invalid logging level')
     })
 
     it('Logger level should be work', function () {
-      const mockAppender = jest.fn(() => {
-      })
+      const mockAppender = jest.fn(() => {})
       const logger = new Logger({
         appender: [mockAppender],
         level: 'ERROR'
@@ -46,12 +44,10 @@ describe('logger', function () {
     })
 
     it('Logger level should be set', function () {
-      ;['DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF', 'ALL'].forEach(
-        (loggerLevel) => {
-          const logger = new Logger({ level: loggerLevel })
-          expect(logger.loggerLevel).toBe(loggerLevel)
-        }
-      )
+      ;['DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF', 'ALL'].forEach((loggerLevel) => {
+        const logger = new Logger({ level: loggerLevel })
+        expect(logger.loggerLevel).toBe(loggerLevel)
+      })
     })
 
     it('configure.appender should is a function array', function () {
@@ -87,8 +83,7 @@ describe('logger', function () {
     })
 
     it('logger.addAppender should be work', function () {
-      const mockAppender = jest.fn(() => {
-      })
+      const mockAppender = jest.fn(() => {})
       logger.addAppender(mockAppender)
       logger.info('info')
 

@@ -1,4 +1,4 @@
-# 1.0.0 (2020-12-20)
+## 0.0.2-0 (2020-12-20)
 
 
 ### Bug Fixes
@@ -8,9 +8,11 @@
 
 ### Features
 
+* Add Logger class ([eb80f58](https://github.com/remote-web-dev-tools/logger/commit/eb80f58cc1cbcb55699f4e98e4d606599d800cb8))
 * complete logger and configure ([6854995](https://github.com/remote-web-dev-tools/logger/commit/68549958857be76a6cd7d4b9f4e0405615b06d8a))
 * consoleAppender use built-in function ([71698d7](https://github.com/remote-web-dev-tools/logger/commit/71698d700a8b01fcd250ba8da76f6bf050de0991))
 * init project ([f8a2e6f](https://github.com/remote-web-dev-tools/logger/commit/f8a2e6fb4d061bf18dfcab114db024b9f05f2735))
+* Logger construct support set context ([ac96547](https://github.com/remote-web-dev-tools/logger/commit/ac96547e6d85a00ce354b6928f2747b9044760f6))
 
 
 

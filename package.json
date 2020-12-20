@@ -2,11 +2,13 @@
   "name": "@rwdt/logger",
   "version": "0.0.2-1",
   "description": "",
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "module": "src/index.js",
   "types": "types/index.d.ts",
   "scripts": {
-    "test": "jest --coverage && coveralls < coverage/lcov.info\n",
+    "test": "jest --coverage && coveralls < coverage/lcov.info",
     "lint": "eslint --color src",
+    "build": "babel src -d lib",
     "changelog": "standard-changelog --first-release",
     "version": "npm run changelog && git add CHANGELOG.md",
     "postversion": "git push --follow-tags"
@@ -22,6 +24,7 @@
   },
   "homepage": "https://github.com/remote-web-dev-tools/logger#readme",
   "devDependencies": {
+    "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "coveralls": "^3.1.0",

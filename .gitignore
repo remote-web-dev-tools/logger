@@ -108,3 +108,6 @@ dist
 
 # Example
 example/
+
+# Build
+lib/

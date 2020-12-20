@@ -1,3 +1,7 @@
+## [0.0.2-3](https://github.com/remote-web-dev-tools/logger/compare/v0.0.2-2...v0.0.2-3) (2020-12-20)
+
+
+
 ## [0.0.2-2](https://github.com/remote-web-dev-tools/logger/compare/v0.0.2-1...v0.0.2-2) (2020-12-20)
 
 

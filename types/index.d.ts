@@ -24,25 +24,29 @@ export interface LoggerConfig {
    * Custom log appender
    */
   appender?: Appender[]
+  /**
+   * Logger context
+   */
+  context?: any
 }
 
-declare class Logger {
+export class Logger {
   loggerLevel: LoggerLevel
   appender: Appender[]
 
   constructor(config?: LoggerConfig);
 
-  debug(...args: any[]): void
+  public debug(...args: any[]): void
 
-  info(...args: any[]): void
+  public info(...args: any[]): void
 
-  warn(...args: any[]): void
+  public warn(...args: any[]): void
 
-  error(...args: any[]): void
+  public error(...args: any[]): void
 
-  setLevel(level: LoggerLevel): void;
+  public setLevel(level: LoggerLevel): void;
 
-  setContext(context: any): void;
+  public setContext(context: any): void;
 
-  addAppender(appender: Appender | Appender[]): void;
+  public addAppender(appender: Appender | Appender[]): void;
 }

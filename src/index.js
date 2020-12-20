@@ -38,7 +38,8 @@ export function Logger (config) {
 
   config = Object.assign({
     appender: [],
-    level: 'ALL'
+    level: 'ALL',
+    context: null
   }, config)
 
   this.setLevel(config.level)
@@ -48,6 +49,8 @@ export function Logger (config) {
   }
 
   this.addAppender(config.appender)
+
+  this.setContext(config.context)
 }
 
 Logger.prototype.setLevel = function setLevel (level) {

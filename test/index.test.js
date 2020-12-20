@@ -4,7 +4,8 @@ describe('logger', function () {
   /* mock console methods */
   beforeAll(() => {
     ['info', 'warn', 'error', 'debug'].forEach((key) => {
-      console[key] = () => {}
+      console[key] = () => {
+      }
     })
   })
 
@@ -19,13 +20,17 @@ describe('logger', function () {
       expect(logger.loggerLevel).toBe('ALL')
     })
 
-    it("Logger level should be in 'ALL' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'OFF'", function () {
+    it('Logger level should be in \'ALL\' | \'DEBUG\' | \'INFO\' | \'WARN\' | \'ERROR\' | \'OFF\'', function () {
       expect(() => new Logger({ level: 'other' })).toThrow('Invalid logging level')
     })
 
     it('Logger level should be work', function () {
-      const mockAppender = jest.fn(() => {})
-      const logger = new Logger({ appender: [mockAppender], level: 'ERROR' })
+      const mockAppender = jest.fn(() => {
+      })
+      const logger = new Logger({
+        appender: [mockAppender],
+        level: 'ERROR'
+      })
 
       logger.debug('debug')
       logger.info('info')
@@ -52,6 +57,11 @@ describe('logger', function () {
     it('configure.appender should is a function array', function () {
       expect(() => new Logger({ appender: 1 })).toThrow('Invalid appender')
       expect(() => new Logger({ appender: [1] })).toThrow('Invalid appender')
+    })
+
+    it('config.context should be save', function () {
+      const logger = new Logger({ context: 'context' })
+      expect(logger.context).toEqual('context')
     })
   })
 

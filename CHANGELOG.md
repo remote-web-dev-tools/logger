@@ -1,4 +1,8 @@
-## 0.0.2-0 (2020-12-20)
+## [0.0.2-1](https://github.com/remote-web-dev-tools/logger/compare/v0.0.2-0...v0.0.2-1) (2020-12-20)
+
+
+
+## [0.0.2-0](https://github.com/remote-web-dev-tools/logger/compare/f8a2e6fb4d061bf18dfcab114db024b9f05f2735...v0.0.2-0) (2020-12-20)
 
 
 ### Bug Fixes

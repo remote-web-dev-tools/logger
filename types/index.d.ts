@@ -1,9 +1,13 @@
 export type LoggerLevel = 'ALL' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'OFF'
 
+/**
+ * LoggingEvent
+ */
 export interface LoggingEvent {
   level: LoggerLevel
   date: Date
   data: any
+  context: any
 }
 
 export type Appender = (loggingEvent: LoggingEvent) => void
@@ -22,11 +26,23 @@ export interface LoggerConfig {
   appender?: Appender[]
 }
 
-declare function configure(config: LoggerConfig): void
+declare class Logger {
+  loggerLevel: LoggerLevel
+  appender: Appender[]
 
-declare namespace logger {
-  function debug(...args: any[]): void
-  function info(...args: any[]): void
-  function warn(...args: any[]): void
-  function error(...args: any[]): void
+  constructor(config?: LoggerConfig);
+
+  debug(...args: any[]): void
+
+  info(...args: any[]): void
+
+  warn(...args: any[]): void
+
+  error(...args: any[]): void
+
+  setLevel(level: LoggerLevel): void;
+
+  setContext(context: any): void;
+
+  addAppender(appender: Appender | Appender[]): void;
 }

@@ -8,12 +8,6 @@ const LEVEL_MAP = {
 }
 
 /**
- *  Default all
- *  @type{LoggerLevel}
- */
-let loggerLevel = 'ALL'
-
-/**
  * Console.log Appender
  * @param {LoggingEvent} loggingEvent
  */
@@ -33,74 +27,76 @@ const consoleAppender = (loggingEvent) => {
 }
 
 /**
- * Logger appender list
- * @type {Appender[]}
+ * Logger
+ * @param {LoggerConfig} [config]
+ * @constructor
  */
-const loggerAppender = [consoleAppender]
+export function Logger (config) {
+  this.appender = [consoleAppender]
+  this.context = null
+  this.loggerLevel = null
+
+  config = Object.assign({
+    appender: [],
+    level: 'ALL'
+  }, config)
+
+  this.setLevel(config.level)
+
+  if (!Array.isArray(config.appender)) {
+    throw new Error('Invalid appender')
+  }
+
+  this.addAppender(config.appender)
+}
+
+Logger.prototype.setLevel = function setLevel (level) {
+  if (['ALL', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF'].includes(level)) {
+    this.loggerLevel = level
+  } else {
+    throw new Error('Invalid logging level')
+  }
+}
+
+Logger.prototype.addAppender = function addAppender (appender) {
+  if (!Array.isArray(appender)) {
+    appender = [appender]
+  }
+
+  appender.forEach((appender) => {
+    if (typeof appender !== 'function') {
+      throw new Error('Invalid appender')
+    } else {
+      this.appender.push(appender)
+    }
+  })
+}
+
+Logger.prototype.setContext = function setContext (context = {}) {
+  this.context = context
+}
 
 /**
  * Basically log function
  * @private
  * @param {LoggingEvent} loggingEvent
  */
-const log = (loggingEvent) => {
-  if (LEVEL_MAP[loggingEvent.level.toUpperCase()] >= LEVEL_MAP[loggerLevel]) {
-    loggerAppender.forEach((appender) => appender(loggingEvent))
+Logger.prototype._log = function _log (loggingEvent) {
+  if (LEVEL_MAP[loggingEvent.level.toUpperCase()] >= LEVEL_MAP[this.loggerLevel]) {
+    this.appender.forEach((appender) => appender(loggingEvent))
   }
 }
-
-/**
- * Configure logger
- * @param {LoggerConfig} config
- */
-export const configure = (config = {}) => {
-  config = Object.assign({
-    appender: [],
-    level: 'ALL'
-  }, config)
-
-  if (['ALL', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF'].includes(config.level)) {
-    loggerLevel = config.level
-  } else {
-    throw new Error('Invalid logging level')
-  }
-
-  if (!Array.isArray(config.appender)) {
-    throw new Error('Invalid appender')
-  }
-
-  config.appender.forEach((appender) => {
-    if (typeof appender !== 'function') {
-      throw new Error('Invalid appender')
-    } else {
-      loggerAppender.push(appender)
-    }
-  })
-}
-
-export const logger = {}
 
 /**
  * Define logger function
  */
 ;['debug', 'info', 'warn', 'error'].forEach((methodName) => {
-  logger[methodName] = (...args) => {
-    log({
+  Logger.prototype[methodName] = function (...args) {
+    this._log({
       level: methodName,
       date: Date.now(),
-      data: args
+      data: args,
+      context: this.context
     })
   }
 })
-
-/**
- * For test, dont call
- * @private
- * @returns {{loggerLevel: LoggerLevel, loggerAppender: Appender[]}}
- */
-export const getLoggerConfiguration = () => {
-  return {
-    loggerLevel,
-    loggerAppender
-  }
-}

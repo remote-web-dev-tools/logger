@@ -1,19 +1,31 @@
-import { logger, configure, getLoggerConfiguration } from '../src'
+import { Logger } from '../src'
 
 describe('logger', function () {
-  describe('configure test', function () {
-    it('configure should be defined', function () {
-      expect(configure).toBeInstanceOf(Function)
+  /* mock console methods */
+  beforeAll(() => {
+    ['info', 'warn', 'error', 'debug'].forEach((key) => {
+      console[key] = () => {}
+    })
+  })
+
+  describe('Logger constructor test', function () {
+    let logger
+
+    beforeEach(() => {
+      logger = new Logger()
     })
 
-    it('default loggerLevel is "ALL"', function () {
-      expect(getLoggerConfiguration().loggerLevel).toBe('ALL')
+    it('default logger level is "ALL"', function () {
+      expect(logger.loggerLevel).toBe('ALL')
     })
 
-    it('loggerLevel should be work', function () {
+    it("Logger level should be in 'ALL' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'OFF'", function () {
+      expect(() => new Logger({ level: 'other' })).toThrow('Invalid logging level')
+    })
+
+    it('Logger level should be work', function () {
       const mockAppender = jest.fn(() => {})
-
-      configure({ appender: [mockAppender], level: 'ERROR' })
+      const logger = new Logger({ appender: [mockAppender], level: 'ERROR' })
 
       logger.debug('debug')
       logger.info('info')
@@ -25,29 +37,69 @@ describe('logger', function () {
     })
 
     it('default appender is [consoleAppender] ', function () {
-      expect(getLoggerConfiguration().loggerAppender.length).toBe(1)
+      expect(logger.appender.length).toBe(1)
     })
 
-    it("configure.level should be in 'ALL' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'OFF'", function () {
-      expect(() => configure({ level: 'other' })).toThrow('Invalid logging level')
-    })
-
-    it('configure.level should be set', function () {
+    it('Logger level should be set', function () {
       ;['DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF', 'ALL'].forEach(
         (loggerLevel) => {
-          configure({ level: loggerLevel })
-          expect(getLoggerConfiguration().loggerLevel).toBe(loggerLevel)
+          const logger = new Logger({ level: loggerLevel })
+          expect(logger.loggerLevel).toBe(loggerLevel)
         }
       )
     })
 
     it('configure.appender should is a function array', function () {
-      expect(() => configure({ appender: 1 })).toThrow('Invalid appender')
-      expect(() => configure({ appender: [1] })).toThrow('Invalid appender')
+      expect(() => new Logger({ appender: 1 })).toThrow('Invalid appender')
+      expect(() => new Logger({ appender: [1] })).toThrow('Invalid appender')
+    })
+  })
+
+  describe('Logger method test', () => {
+    let logger
+
+    beforeEach(() => {
+      logger = new Logger()
+    })
+
+    it('logger.setLevel should check level', function () {
+      expect(() => logger.setLevel('other')).toThrow('Invalid logging level')
+    })
+
+    it('logger.setLevel should be work', function () {
+      logger.setLevel('WARN')
+      expect(logger.loggerLevel).toEqual('WARN')
+    })
+
+    it('logger.addAppender should should check appender', function () {
+      expect(() => logger.addAppender('other')).toThrow('Invalid appender')
+      expect(() => logger.addAppender(['other'])).toThrow('Invalid appender')
+    })
+
+    it('logger.addAppender should be work', function () {
+      const mockAppender = jest.fn(() => {
+      })
+      logger.addAppender(mockAppender)
+      logger.info('info')
+
+      expect(mockAppender).toBeCalledTimes(1)
+    })
+
+    it('logger.setContext should be work', function () {
+      expect(logger.context).toEqual(null)
+
+      logger.setContext({ type: 'test' })
+      expect(logger.context).toEqual({ type: 'test' })
     })
   })
 
   describe('logger test', function () {
+    let logger
+
+    beforeEach(() => {
+      logger = new Logger()
+    })
+
     it('logger should be defined', function () {
       expect(logger).toBeDefined()
     })
@@ -55,20 +107,6 @@ describe('logger', function () {
     it('logger function should be define', function () {
       ;['debug', 'info', 'warn', 'error'].forEach((methodName) => {
         expect(logger[methodName]).toBeInstanceOf(Function)
-      })
-    })
-
-    it('logger function should set correct level', function () {
-      let level
-
-      const mockAppender = jest.fn((loggingEvent) => {
-        expect(loggingEvent.level).toEqual(level)
-      })
-
-      configure({ appender: [mockAppender] })
-      ;['debug', 'info', 'warn', 'error'].forEach((methodName) => {
-        level = methodName
-        logger[methodName]()
       })
     })
 
@@ -81,7 +119,10 @@ describe('logger', function () {
         expect(loggingEvent.data).toEqual(data)
       })
 
-      configure({ appender: [mockAppender] })
+      const logger = new Logger({
+        appender: [mockAppender]
+      })
+
       ;['debug', 'info', 'warn', 'error'].forEach((methodName) => {
         level = methodName
         data = [1, 'string', [1, 2], { a: 1 }]

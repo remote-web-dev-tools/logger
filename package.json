@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "types": "types/index.d.ts",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest --coverage && coveralls < coverage/lcov.info\n",
     "lint": "eslint --color src",
     "changelog": "standard-changelog --first-release",
     "version": "npm run changelog && git add CHANGELOG.md"
@@ -23,6 +23,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
+    "coveralls": "^3.1.0",
     "eslint": "^7.14.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",

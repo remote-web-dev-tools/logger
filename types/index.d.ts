@@ -4,12 +4,28 @@ export type LoggerLevel = 'ALL' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'OFF'
  * LoggingEvent
  */
 export interface LoggingEvent {
+  /**
+   * The log level
+   */
   level: LoggerLevel
+  /**
+   * Log creation time
+   */
   date: Date
+  /**
+   * Log
+   */
   data: any
+  /**
+   * Log context
+   */
   context: any
 }
 
+/**
+ * Log Appender
+ * Can custom log output
+ */
 export type Appender = (loggingEvent: LoggingEvent) => void
 
 /**
